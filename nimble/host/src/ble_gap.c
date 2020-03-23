@@ -650,7 +650,7 @@ ble_gap_master_reset_state(void)
     ble_hs_timer_resched();
 }
 
-static void
+void
 ble_gap_slave_reset_state(uint8_t instance)
 {
     ble_gap_slave[instance].op = BLE_GAP_OP_NULL;

@@ -1300,6 +1300,8 @@ int ble_gap_event_listener_register(struct ble_gap_event_listener *listener,
  */
 int ble_gap_event_listener_unregister(struct ble_gap_event_listener *listener);
 
+void ble_gap_slave_reset_state(uint8_t instance);
+
 #ifdef __cplusplus
 }
 #endif
