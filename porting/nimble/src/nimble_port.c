@@ -76,9 +76,13 @@ nimble_port_run(void)
 {
     struct ble_npl_event *ev;
     int arg;
+    uint64_t cnt = 0;
 
     while (1) {
+        ++cnt;
+        ESP_LOGW("NimBLE", "ble_npl_event_get start: %llu", cnt);
         ev = ble_npl_eventq_get(&g_eventq_dflt, BLE_NPL_TIME_FOREVER);
+        ESP_LOGW("NimBLE", "ble_npl_event_run start: %llu", cnt);
         ble_npl_event_run(ev);
         arg = (int)ble_npl_event_get_arg(ev);
         if (arg == NIMBLE_PORT_DEINIT_EV_ARG) {
