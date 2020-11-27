@@ -194,12 +194,18 @@ ble_hs_unlock_nested(void)
     BLE_HS_DBG_ASSERT_EVAL(rc == 0 || rc == OS_NOT_STARTED);
 }
 
+int BLE_HS_LOCK_COUNT = 0;
+
 /**
  * Locks the BLE host mutex.  Nested locks not allowed.
  */
 void
 ble_hs_lock(void)
 {
+    char addr_buf[9] = { 0 };
+    itoa((uint32_t)(__builtin_return_address(0)), addr_buf, 16);
+    ESP_LOGI("ble_hs_lock", "call from: 0x%s", addr_buf);
+
     BLE_HS_DBG_ASSERT(!ble_hs_locked_by_cur_task());
 #if MYNEWT_VAL(BLE_HS_DEBUG)
     if (!ble_npl_os_started()) {
@@ -208,6 +214,7 @@ ble_hs_lock(void)
 #endif
 
     ble_hs_lock_nested();
+    BLE_HS_LOCK_COUNT++;
 }
 
 /**
@@ -222,6 +229,7 @@ ble_hs_unlock(void)
     }
 #endif
 
+    BLE_HS_LOCK_COUNT--;
     ble_hs_unlock_nested();
 }
 
