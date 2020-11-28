@@ -71,6 +71,7 @@ nimble_port_deinit(void)
     ble_hs_deinit();
 }
 
+static bool s_timeout = false;
 void
 nimble_port_run(void)
 {
@@ -78,17 +79,34 @@ nimble_port_run(void)
     int arg;
     uint64_t cnt = 0;
 
+    const ble_npl_time_t tmo = 60 * 1000 / portTICK_RATE_MS;
+
     while (1) {
         ++cnt;
         ESP_LOGW("NimBLE", "ble_npl_event_get start: %llu", cnt);
-        ev = ble_npl_eventq_get(&g_eventq_dflt, BLE_NPL_TIME_FOREVER);
+        ev = ble_npl_eventq_get(&g_eventq_dflt, tmo);
         ESP_LOGW("NimBLE", "ble_npl_event_run start: %llu", cnt);
-        ble_npl_event_run(ev);
-        arg = (int)ble_npl_event_get_arg(ev);
-        if (arg == NIMBLE_PORT_DEINIT_EV_ARG) {
-            break;
+
+        if (ev == NULL) {
+            ESP_LOGW("NimBLE", "ble_npl_eventq_get timed out");
+            s_timeout = true;
+        }
+        else {
+            ble_npl_event_run(ev);
+            arg = (int)ble_npl_event_get_arg(ev);
+            if (arg == NIMBLE_PORT_DEINIT_EV_ARG) {
+                break;
+            }
         }
     }
+}
+
+bool nimble_port_is_timeout(bool reset) {
+    bool res = s_timeout;
+    if (reset) {
+        s_timeout = false;
+    }
+    return res;
 }
 
 /**
