@@ -77,15 +77,11 @@ nimble_port_run(void)
 {
     struct ble_npl_event *ev;
     int arg;
-    uint64_t cnt = 0;
 
     const ble_npl_time_t tmo = 60 * 1000 / portTICK_RATE_MS;
 
     while (1) {
-        ++cnt;
-        ESP_LOGW("NimBLE", "ble_npl_event_get start: %llu", cnt);
         ev = ble_npl_eventq_get(&g_eventq_dflt, tmo);
-        ESP_LOGW("NimBLE", "ble_npl_event_run start: %llu", cnt);
 
         if (ev == NULL) {
             ESP_LOGW("NimBLE", "ble_npl_eventq_get timed out");
