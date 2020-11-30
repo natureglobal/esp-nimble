@@ -126,6 +126,7 @@ nimble_port_stop(void)
     int rc;
 
     ble_npl_sem_init(&ble_hs_stop_sem, 0);
+    ESP_LOGI("NimBLE", "investigation: %s, %d", __FUNCTION__, __LINE__);
     /* Initiate a host stop procedure. */
     rc = ble_hs_stop(&stop_listener, ble_hs_stop_cb,
             NULL);
@@ -134,16 +135,20 @@ nimble_port_stop(void)
         return rc;
     }
 
+    ESP_LOGI("NimBLE", "investigation: %s, %d", __FUNCTION__, __LINE__);
     /* Wait till the host stop procedure is complete */
     ble_npl_sem_pend(&ble_hs_stop_sem, BLE_NPL_TIME_FOREVER);
 
     ble_npl_event_init(&ble_hs_ev_stop, nimble_port_stop_cb,
             (void *)NIMBLE_PORT_DEINIT_EV_ARG);
+    ESP_LOGI("NimBLE", "investigation: %s, %d", __FUNCTION__, __LINE__);
     ble_npl_eventq_put(&g_eventq_dflt, &ble_hs_ev_stop);
 
+    ESP_LOGI("NimBLE", "investigation: %s, %d", __FUNCTION__, __LINE__);
     /* Wait till the event is serviced */
     ble_npl_sem_pend(&ble_hs_stop_sem, BLE_NPL_TIME_FOREVER);
 
+    ESP_LOGI("NimBLE", "investigation: %s, %d", __FUNCTION__, __LINE__);
     ble_npl_sem_deinit(&ble_hs_stop_sem);
 
     return rc;
