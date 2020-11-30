@@ -82,10 +82,10 @@ nimble_port_run(void)
 
     while (1) {
         ev = ble_npl_eventq_get(&g_eventq_dflt, tmo);
-
         if (ev == NULL) {
             ESP_LOGW("NimBLE", "ble_npl_eventq_get timed out");
             s_timeout = true;
+            break;
         }
         else {
             ble_npl_event_run(ev);
