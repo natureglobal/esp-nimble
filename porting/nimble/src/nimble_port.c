@@ -78,7 +78,7 @@ nimble_port_run(void)
     struct ble_npl_event *ev;
     int arg;
 
-    const ble_npl_time_t tmo = 60 * 1000 / portTICK_RATE_MS;
+    const ble_npl_time_t tmo = 600 * 1000 / portTICK_RATE_MS;
 
     while (1) {
         ev = ble_npl_eventq_get(&g_eventq_dflt, tmo);
