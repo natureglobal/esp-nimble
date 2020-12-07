@@ -4817,8 +4817,10 @@ ble_gap_preempt_done(void)
 
     disc_preempted = 0;
 
+    BLE_HS_LOG(INFO, "investigation: %s, %d", __FUNCTION__, __LINE__);
     /* protects slaves from accessing by multiple threads */
     ble_npl_mutex_pend(&preempt_done_mutex, 0xFFFFFFFF);
+    BLE_HS_LOG(INFO, "investigation: %s, %d", __FUNCTION__, __LINE__);
     memset(slaves, 0, sizeof(slaves));
 
     ble_hs_lock();

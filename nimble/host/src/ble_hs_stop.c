@@ -194,7 +194,9 @@ ble_hs_stop(struct ble_hs_stop_listener *listener,
 
     /* Abort all active GAP procedures. */
     ble_gap_preempt();
+    BLE_HS_LOG(INFO, "investigation: %s, %d", __FUNCTION__, __LINE__);
     ble_gap_preempt_done();
+    BLE_HS_LOG(INFO, "investigation: %s, %d", __FUNCTION__, __LINE__);
 
     rc = ble_gap_event_listener_register(&ble_hs_stop_gap_listener,
                                          ble_hs_stop_gap_event, NULL);

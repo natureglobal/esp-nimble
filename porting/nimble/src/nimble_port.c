@@ -78,7 +78,7 @@ nimble_port_run(void)
     struct ble_npl_event *ev;
     int arg;
 
-    const ble_npl_time_t tmo = 600 * 1000 / portTICK_RATE_MS;
+    const ble_npl_time_t tmo = 2 * 60 * 1000 / portTICK_RATE_MS;
 
     while (1) {
         ev = ble_npl_eventq_get(&g_eventq_dflt, tmo);
@@ -130,6 +130,7 @@ nimble_port_stop(void)
     /* Initiate a host stop procedure. */
     rc = ble_hs_stop(&stop_listener, ble_hs_stop_cb,
             NULL);
+    ESP_LOGI("NimBLE", "investigation: " "ble_hs_stop return: %d", rc);
     if (rc != 0) {
         ble_npl_sem_deinit(&ble_hs_stop_sem);
         return rc;
